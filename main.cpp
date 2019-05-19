@@ -2,23 +2,28 @@
 #include <math.h>
 
 using namespace std;
-/*
+
 class vector3d
 {
 protected:
     int n;
     double *data = NULL;
+    int m;
+    double *mat = NULL;
 public:
     vector3d(int n)
     {
         this->n = n;
         data = new double[n];
+        this->m = m;
+        mat = new double[m];
     }
     ~vector3d()
     {
         delete[]data;
+        delete[]mat;
     }
-    vector3d operator+(const vector3d &vec)//сложение векторов
+    /*vector3d operator+(const vector3d &vec)//сложение векторов
     {
         vector3d newvec(n);
         for(int i = 0; i < n; i++)
@@ -50,6 +55,17 @@ public:
         vector3d newvec(n);
         newvec = (sqrt(vec.data[0] * vec.data[0] + vec.data[1] * vec.data[1] + vec.data[2] * vec.data[2])) * (sqrt(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]));
         return newvec;
+    }*/
+    vector3d operator*()//ошибка
+    {
+        vector3d new_vec(n);
+        for(int i = 0; i < n; i++)
+        {
+            new_vec.data[i] = 0;
+            for(int j = i; j < i + 3; j++)
+                new_vec.data[i] = new_vec.data[i] + data[i] * mat[j];
+        }
+        return new_vec;
     }
     int getvalue(int i) const
     {
@@ -59,7 +75,7 @@ public:
     {
         data[i] = value;
     }
-};
+};/*
 vector3d operator*(int num, const vector3d &vec)// умножение на константу
 {
     return vec*num;
@@ -71,15 +87,20 @@ class matrix
 protected:
     int m;
     double *mat = NULL;
+    int n;
+    double *data = NULL;
 public:
     matrix(int m)
     {
         this->m = m;
         mat = new double[m];
+        this->n = n;
+        data = new double[n];
     }
     ~matrix()
     {
         delete[]mat;
+        delete[]data;
     }
     matrix operator+(const matrix &matrix_1)//сложение векторов
     {
@@ -216,19 +237,14 @@ int main()
         cin>>matrix_value;
         a_2.setvalue(j,matrix_value);
     }
-    matrix a_sum = a_1 + a_2;
-    matrix a_3(9);
+    vector3d a_vec(3);
     cout<<"вектор"<<endl;
-    for(int j = 0; j < 9; j++)
+    for(int j = 0; j < 3; j++)
     {
-        if (j < 3)
-        {
-            cin >> matrix_value;
-            a_3.setvalue(j,matrix_value);
-        }
-        else
-            a_3.setvalue(j,0);
+        cin >> matrix_value;
+        a_vec.setvalue(j, matrix_value);
     }
+    matrix a_sum = a_1 + a_2;
     cout<<"сумма матриц"<<endl;
     for(int j = 0; j < 9; j++)
     {
@@ -264,14 +280,11 @@ int main()
         else
             cout<<a_multi.getvalue(j)<<"\n";
     }
-    matrix a_vec = a_3 * a_2;
+    vector3d a_v = a_1 * a_vec;
     cout<<"умножение вектора на первую матрицу"<<endl;
     for(int j = 0; j < 3; j++)
     {
-        if ((j + 1) % 3 != 0)
-            cout<<a_vec.getvalue(j)<<"\t";
-        else
-            cout<<a_vec.getvalue(j)<<"\n";
+            cout<<a_v.getvalue(j)<<"\t";
     }
     cout<<"детерминант первой матрицы"<<endl;
     cout<<a_1.determ()<<endl;
