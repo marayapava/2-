@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 /*
@@ -47,10 +48,7 @@ public:
     vector3d operator*(const vector3d &vec)// скалярное произведение
     {
         vector3d newvec(n);
-        for(int i = 0; i < n; i++)
-        {
-            newvec.data[i] = vec.data[i]*data[i];
-        }
+        newvec = (sqrt(vec.data[0] * vec.data[0] + vec.data[1] * vec.data[1] + vec.data[2] * vec.data[2])) * (sqrt(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]));
         return newvec;
     }
     int getvalue(int i) const
@@ -150,7 +148,7 @@ public:
     double determ()
     {
         double det;
-        det = mat[4]*mat[5]*mat[9] + mat[2]*mat[6]*mat[7] + mat[3]*mat[4]*mat[8] - mat[1]*mat[6]*mat[8] - mat[2]*mat[4]*mat[9] - mat[3]*mat[5]*mat[7];
+        det = mat[0]*mat[4]*mat[8] + mat[1]*mat[5]*mat[6] + mat[2]*mat[3]*mat[7] - mat[0]*mat[5]*mat[7] - mat[1]*mat[3]*mat[8] - mat[2]*mat[4]*mat[6];
         return det;
     }
 };
@@ -160,11 +158,11 @@ matrix operator*(int num, const matrix &matrix_1)// умножение на константу
 }
 
 
-
 int main()
 {
     setlocale(LC_ALL, "rus");
-    /*int vector_value = 0;
+    /*double number = 0.5;
+    int vector_value = 0;
     cout<<"первый вектор"<<endl;
     vector3d a(3);
     for (int k = 0; k < 3; k++)
@@ -197,8 +195,8 @@ int main()
     {
         cout<<e.getvalue(k)<<endl;
     }
-    cout<<"скалярное произведение"<<endl;
-    vector3d f = b*a;
+    cout<<"скалярное произведение первого и второго вектора, угол между которыми 60 градусов"<<endl;
+    vector3d f = a * b * number;
     for (int k = 0; k < 3; k++)
     {
         cout<<f.getvalue(k)<<endl;
@@ -219,6 +217,18 @@ int main()
         a_2.setvalue(j,matrix_value);
     }
     matrix a_sum = a_1 + a_2;
+    matrix a_3(9);
+    cout<<"вектор"<<endl;
+    for(int j = 0; j < 9; j++)
+    {
+        if (j < 3)
+        {
+            cin >> matrix_value;
+            a_3.setvalue(j,matrix_value);
+        }
+        else
+            a_3.setvalue(j,0);
+    }
     cout<<"сумма матриц"<<endl;
     for(int j = 0; j < 9; j++)
     {
@@ -253,6 +263,15 @@ int main()
             cout<<a_multi.getvalue(j)<<"\t";
         else
             cout<<a_multi.getvalue(j)<<"\n";
+    }
+    matrix a_vec = a_3 * a_2;
+    cout<<"умножение вектора на первую матрицу"<<endl;
+    for(int j = 0; j < 3; j++)
+    {
+        if ((j + 1) % 3 != 0)
+            cout<<a_vec.getvalue(j)<<"\t";
+        else
+            cout<<a_vec.getvalue(j)<<"\n";
     }
     cout<<"детерминант первой матрицы"<<endl;
     cout<<a_1.determ()<<endl;
